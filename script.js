@@ -1,4 +1,4 @@
-const game = (
+const game_controler = (
     function() 
     {   
         const _ROWS = 3;
@@ -51,9 +51,14 @@ const game = (
                 console.log(_board.map((row) => row.map((cell) => cell.getValue())));
             };
 
+            const getTokenAt = function(row, column) {
+                return _board[row][column].getValue();
+            };
+
             return {
                 insertToken: insertToken,
-                printBoard: printBoard
+                printBoard: printBoard,
+                getTokenAt: getTokenAt
             };
         }
 
@@ -75,6 +80,7 @@ const game = (
             const _player_two = Player(player_two_name, 'O');
 
             let active_player = _player_one;
+            let game_over = false;
 
             const printNewRound = function() {
                 console.log(`${active_player.getPlayerName()}'s (${active_player.getPlayerToken()}) turn.`);
@@ -83,20 +89,107 @@ const game = (
 
             const switchPlayerTurn = () => active_player === _player_one ? active_player = _player_two : active_player = _player_one;
 
-            const playRound = function(row, column) {
-                console.log(`${active_player.getPlayerName()}'s turn. Try to put ${active_player.getPlayerToken()} on (${row}, ${column}).`);
-
-                // Checks if the play is valid
-                if(_game_board.insertToken(row, column, active_player.getPlayerToken()) === true)
+            const isGameOver = function(row, column, token) {
+                game_over = true;
+                
+                // Iterates over the row
+                for(let c = 0 ; c < _COLUMNS ; c++)
                 {
-                    switchPlayerTurn();
-                    printNewRound();
+                    if(_game_board.getTokenAt(row, c) != token)
+                    {
+                        game_over = false;
+                        break;
+                    }
+                }
+
+                // Iterates over the column if it's not game over yet
+                if(game_over == false)
+                {
+                    let r;
+
+                    for(r = 0 ; r < _ROWS ; r++)
+                        if(_game_board.getTokenAt(r, column) != token)
+                            break;
+
+                    game_over = r == _ROWS ? true : game_over;
+                }
+
+                // Iterates over diagonals if it's not game over yet
+                if(game_over == false)
+                {
+                    let i;
+
+                    for(i = 0 ; i < _ROWS ; i++)
+                        if(_game_board.getTokenAt(i, i) != token)
+                            break;
+
+                    game_over = i == _ROWS ? true : game_over;
+
+                    if(game_over == false)
+                    {
+                        let r = 0;
+                        let c = _COLUMNS - 1;
+
+                        while(r < _ROWS)
+                        {
+                            if(_game_board.getTokenAt(r, c) != token)
+                            {
+                                game_over = false;
+                                break;
+                            }
+
+                            r++;
+                            c--;
+                        }
+
+                        game_over = r == _ROWS ? true : game_over;
+                    }
+                }
+
+                // Finally, checks is the board is fully filled
+                if(game_over == false)
+                {
+                    for(let i = 0 ; i < _ROWS ; i++)
+                        for(let j = 0 ; j < _COLUMNS ; j++)
+                            if(_game_board.getTokenAt(i, j) == null)
+                                return false;
+
+                    game_over = true;
+                    active_player = null;
+                }
+
+                return game_over;
+            };
+
+            const playRound = function(row, column) {
+                if(game_over)
+                    console.log("GAME IS OVER ALREADY");
+                else
+                {
+                    console.log(`${active_player.getPlayerName()}'s turn. Try to put ${active_player.getPlayerToken()} on (${row}, ${column}).`);
+
+                    // Checks if the play is valid
+                    if(_game_board.insertToken(row, column, active_player.getPlayerToken()) === true)
+                    {
+                        if(isGameOver(row, column, active_player.getPlayerToken()))
+                        {
+                            // Checks if it's a draw
+                            if(active_player == null)
+                                console.log("IT'S A DRAW");
+                            else
+                                console.log(`PLAYER ${active_player.getPlayerName()} WON!`);
+                        }
+
+                        switchPlayerTurn();
+                        printNewRound();
+                    }
                 }
             };
 
             return {
                 playRound: playRound,
-                getActivePlayer: () => active_player
+                getActivePlayer: () => active_player,
+                isGameOver: () => game_over
             };
         }
 
