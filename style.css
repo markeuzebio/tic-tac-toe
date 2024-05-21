@@ -72,35 +72,25 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5rem;
+    gap: 2rem;
 
     flex: 1;
 }
 
 .board {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
 
     width: 300px;
     height: 300px;
-}
-
-.board-row {
-    display: flex;
-
-    flex: 1;
-}
-
-.board, .board-row {
-    gap: 2px;
 }
 
 .board-square {
     flex: 1;
 
     background-color: black;
-
-    /* border: 1px solid white; */
 }
 
 .display {
