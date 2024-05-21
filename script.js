@@ -163,7 +163,7 @@ const game_controler = (
 
             const playRound = function(row, column) {
                 if(game_over)
-                    console.log("GAME IS OVER ALREADY");
+                    return false;
                 else
                 {
                     console.log(`${active_player.getPlayerName()}'s turn. Try to put ${active_player.getPlayerToken()} on (${row}, ${column}).`);
@@ -179,11 +179,17 @@ const game_controler = (
                             else
                                 console.log(`PLAYER ${active_player.getPlayerName()} WON!`);
                         }
-
-                        switchPlayerTurn();
-                        printNewRound();
+                        else
+                        {
+                            switchPlayerTurn();
+                            printNewRound();
+                        }
                     }
+                    else
+                        return false;
                 }
+
+                return true;
             };
 
             return {
@@ -194,5 +200,50 @@ const game_controler = (
         }
 
         return GameController();
+    }
+)();
+
+const game_ui = (
+    function()
+    {
+        const _display_active_player = document.querySelector('.display');
+        const _board_squares_array = Array.from(document.querySelectorAll('.board-square'));
+
+        _board_squares_array.forEach((square) => square.addEventListener("click", addTokenToSquare));
+
+        renderDisplay();
+
+        function renderDisplay(string = game_controler.getActivePlayer().getPlayerName() + ` (${game_controler.getActivePlayer().getPlayerToken()})`) {
+            _display_active_player.textContent = string;
+        }
+
+        function addTokenToSquare(e)
+        {
+            const square = e.target;
+            const row = Math.floor(_board_squares_array.indexOf(square) / 3);
+            const column = _board_squares_array.indexOf(square) % 3;
+            const active_player = game_controler.getActivePlayer();
+
+            if(game_controler.isGameOver())
+                return;
+            else
+            {
+                // If it is possible to put active_player_token in (row,column) square
+                if(game_controler.playRound(row, column) === true)
+                {
+                    square.textContent = active_player.getPlayerToken();
+
+                    if(game_controler.isGameOver())
+                    {
+                        if(game_controler.getActivePlayer() == null)
+                            renderDisplay("DRAW!");
+                        else
+                            renderDisplay(`${active_player.getPlayerName()} WON!`);
+                    }
+                    else
+                        renderDisplay();
+                }
+            }
+        }
     }
 )();
