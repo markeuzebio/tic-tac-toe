@@ -58,6 +58,14 @@ table {
 :root {
     font-size: 62.5%;
     box-sizing: border-box;
+
+    --bg-main-color: #0d1b2a;
+    --main-lyrics-color: #778da9;
+    --bg-square-color: #415a77;
+    --bg-square-hover-color: #778da9;
+    --square-pieces-color: #ffff;
+    --bg-display-color: #aec3b0;
+    --display-lyrics-color: black;
 }
 
 body {
@@ -65,6 +73,8 @@ body {
     flex-direction: column;
 
     min-height: 100vh;
+    background-color: var(--bg-main-color);
+    color: var(--main-lyrics-color);
 }
 
 main {
@@ -82,18 +92,18 @@ header {
     justify-content: center;
     align-items: center;
 
-    padding: 1rem 0;
-    font-size: 3.5rem;
+    padding: 2rem 0 0 0;
+    font-size: 5rem;
 }
 
 .board {
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 4px;
 
-    width: 300px;
-    height: 300px;
+    width: 350px;
+    height: 350px;
 }
 
 .board-square {
@@ -103,15 +113,21 @@ header {
 
     flex: 1;
 
-    background-color: black;
-    color: white;
+    background-color: var(--bg-square-color);
+    color: var(--square-pieces-color);
     font-size: 5rem;
+    border-radius: 5px;
+}
+
+.board-square:hover {
+    background-color: var(--bg-square-hover-color);
+    cursor: pointer;
 }
 
 .display {
     padding: 1rem 3rem;
     font-size: 3rem;
-    border: 1px solid red;
     border-radius: 12px;
-    background-color: gray;
+    background-color: var(--bg-display-color);
+    color: var(--display-lyrics-color);
 }
