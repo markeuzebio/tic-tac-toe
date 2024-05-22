@@ -72,9 +72,18 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
 
     flex: 1;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 1rem 0;
+    font-size: 3.5rem;
 }
 
 .board {
