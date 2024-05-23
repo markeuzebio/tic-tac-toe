@@ -65,6 +65,11 @@ table {
     src: url(fonts/04B_30__.TTF);
 }
 
+@font-face {
+    font-family: 'Retro Gaming';
+    src: url(fonts/Retro\ Gaming.ttf);
+}
+
 :root {
     font-size: 62.5%;
     box-sizing: border-box;
@@ -74,6 +79,7 @@ table {
     --main-lyrics-color: #778da9;
     --bg-square-color: #415a77;
     --bg-square-hover-color: #778da9;
+    --bg-menu-color: #8d99ae;
     --square-pieces-color: #ffff;
     --bg-display-color: #aec3b0;
     --display-lyrics-color: black;
@@ -142,4 +148,76 @@ header {
     border-radius: 12px;
     background-color: var(--bg-display-color);
     color: var(--display-lyrics-color);
+}
+
+.invisible {
+    display: none;
+}
+
+.menu {
+    width: 400px;
+    height: 150px;
+    border-radius: 10px;
+    padding: 10px;
+    background: var(--bg-menu-color);
+    color: black;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    height: 100%;
+    font-family: 'Retro Gaming';
+}
+
+form h2 {
+    font-size: 2rem;
+    text-align: center;
+}
+
+form label {
+    font-size: 1.5rem;
+}
+
+form input {
+    padding: 3px 5px;
+    border-radius: 12px;
+    border-style: inset;
+}
+
+form input:focus {
+    background-color: lightcyan;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.form-row-content {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-row.footer {
+    flex: 1;
+    align-items: flex-end;
+    margin-bottom: 5px;
+}
+
+.form-row.footer button {
+    background: none;
+    border: none;
+    font-family: 'Retro Gaming';
+}
+
+.form-row.footer button:hover:not(.btn-menu) {
+    border-radius: 6px;
+    background-color: #5b82b4;
+    padding: 5px;
+
+    cursor: pointer;
 }
