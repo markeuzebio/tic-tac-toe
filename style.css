@@ -55,9 +55,20 @@ table {
 
 /**************************************************/
 
+@font-face {
+    font-family: 'Death Rattle';
+    src: url(fonts/deathrattlebb_reg.ttf);
+}
+
+@font-face {
+    font-family: 'Pixelar';
+    src: url(fonts/04B_30__.TTF);
+}
+
 :root {
     font-size: 62.5%;
     box-sizing: border-box;
+    font-family: 'Pixelar', sans-serif, system-ui;
 
     --bg-main-color: #0d1b2a;
     --main-lyrics-color: #778da9;
@@ -115,7 +126,8 @@ header {
 
     background-color: var(--bg-square-color);
     color: var(--square-pieces-color);
-    font-size: 5rem;
+    font-size: 8rem;
+    font-family: 'Death Rattle';
     border-radius: 5px;
 }
 
@@ -126,7 +138,7 @@ header {
 
 .display {
     padding: 1rem 3rem;
-    font-size: 3rem;
+    font-size: 2.5rem;
     border-radius: 12px;
     background-color: var(--bg-display-color);
     color: var(--display-lyrics-color);
