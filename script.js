@@ -201,34 +201,13 @@ const GameController = (
     }
 )();
 
-const game_ui = (
-    
+const ui = (    
     function()
     {
-        let game_controller = GameController();
-
-        // Module which concerns about menu
-        (
-            function ()
-            {
-                const _game_screen = document.querySelectorAll('.game');
-                const _game_menu = document.querySelector('.menu');
-                const _btn_return = document.querySelector('#btn-return');
-
-                _btn_return.addEventListener('click', showGame)
-
-                function showGame() {
-                    if(game_controller != null)
-                    {
-                        _game_screen.forEach((e) => e.classList.remove('invisible'));
-                        _game_menu.classList.add('invisible');
-                    }
-                }
-            }()
-        );
+        let game_controller = null;
 
         // Module which concerns about game itself
-        (
+        const GameUi = 
             function ()
             {
                 const _display_active_player = document.querySelector('.display');
@@ -270,7 +249,60 @@ const game_ui = (
                         }
                     }
                 }
-            }
-        )();
+
+                function blankAllSquares() {
+                    _board_squares_array.forEach((square) => square.target.textContent = '');
+                }
+
+                return {
+                    blankAllSquares: blankAllSquares
+                };
+            };
+
+        // Module which concerns about menu
+        (
+            function ()
+            {
+                let game_ui = null;
+                const _game_screen = document.querySelectorAll('.game');
+                const _game_menu = document.querySelector('.menu');
+                const _btn_start = document.querySelector('#btn-start');
+                const _btn_restart = document.querySelector('#btn-restart');
+                const _btn_return = document.querySelector('#btn-return');
+
+                _btn_return.addEventListener('click', showGame);
+                _btn_start.addEventListener('click', startGame);
+                _btn_restart.addEventListener('click', restartGame);
+
+                function showGame()
+                {
+                    if(game_controller != null)
+                    {
+                        _game_screen.forEach((e) => e.classList.remove('invisible'));
+                        _game_menu.classList.add('invisible');
+                    }
+                }
+
+                function startGame()
+                {
+                    if(game_controller == null)
+                    {
+                        game_controller = GameController();
+                        game_ui = GameUi();
+                        showGame();
+                    }
+                }
+
+                function restartGame()
+                {
+                    if(game_controller != null)
+                    {
+                        game_controller = GameController();
+                        game_ui.blankAllSquares();
+                        showGame();
+                    }
+                }
+            }()
+        );
     }
 )();
