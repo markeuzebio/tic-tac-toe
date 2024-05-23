@@ -1,4 +1,4 @@
-const game_controler = (
+const GameController = (
     function() 
     {   
         const _ROWS = 3;
@@ -73,7 +73,7 @@ const game_controler = (
             };
         }
 
-        function GameController(player_one_name = "Player 1", player_two_name = "Player 2")
+        return function(player_one_name = "Player 1", player_two_name = "Player 2")
         {
             const _game_board = Gameboard();
             const _player_one = Player(player_one_name, 'X');
@@ -198,52 +198,79 @@ const game_controler = (
                 isGameOver: () => game_over
             };
         }
-
-        return GameController();
     }
 )();
 
 const game_ui = (
+    
     function()
     {
-        const _display_active_player = document.querySelector('.display');
-        const _board_squares_array = Array.from(document.querySelectorAll('.board-square'));
+        let game_controller = GameController();
 
-        _board_squares_array.forEach((square) => square.addEventListener("click", addTokenToSquare));
-
-        renderDisplay();
-
-        function renderDisplay(string = game_controler.getActivePlayer().getPlayerName() + ` (${game_controler.getActivePlayer().getPlayerToken()})`) {
-            _display_active_player.textContent = string;
-        }
-
-        function addTokenToSquare(e)
-        {
-            const square = e.target;
-            const row = Math.floor(_board_squares_array.indexOf(square) / 3);
-            const column = _board_squares_array.indexOf(square) % 3;
-            const active_player = game_controler.getActivePlayer();
-
-            if(game_controler.isGameOver())
-                return;
-            else
+        // Module which concerns about menu
+        (
+            function ()
             {
-                // If it is possible to put active_player_token in (row,column) square
-                if(game_controler.playRound(row, column) === true)
-                {
-                    square.textContent = active_player.getPlayerToken();
+                const _game_screen = document.querySelectorAll('.game');
+                const _game_menu = document.querySelector('.menu');
+                const _btn_return = document.querySelector('#btn-return');
 
-                    if(game_controler.isGameOver())
+                _btn_return.addEventListener('click', showGame)
+
+                function showGame() {
+                    if(game_controller != null)
                     {
-                        if(game_controler.getActivePlayer() == null)
-                            renderDisplay("DRAW!");
-                        else
-                            renderDisplay(`${active_player.getPlayerName()} WON!`);
+                        _game_screen.forEach((e) => e.classList.remove('invisible'));
+                        _game_menu.classList.add('invisible');
                     }
+                }
+            }()
+        );
+
+        // Module which concerns about game itself
+        (
+            function ()
+            {
+                const _display_active_player = document.querySelector('.display');
+                const _board_squares_array = Array.from(document.querySelectorAll('.board-square'));
+
+                _board_squares_array.forEach((square) => square.addEventListener("click", addTokenToSquare));
+
+                renderDisplay();
+
+                function renderDisplay(string = game_controller.getActivePlayer().getPlayerName() + ` (${game_controller.getActivePlayer().getPlayerToken()})`) {
+                    _display_active_player.textContent = string;
+                }
+
+                function addTokenToSquare(e)
+                {
+                    const square = e.target;
+                    const row = Math.floor(_board_squares_array.indexOf(square) / 3);
+                    const column = _board_squares_array.indexOf(square) % 3;
+                    const active_player = game_controller.getActivePlayer();
+
+                    if(game_controller.isGameOver())
+                        return;
                     else
-                        renderDisplay();
+                    {
+                        // If it is possible to put active_player_token in (row,column) square
+                        if(game_controller.playRound(row, column) === true)
+                        {
+                            square.textContent = active_player.getPlayerToken();
+
+                            if(game_controller.isGameOver())
+                            {
+                                if(game_controller.getActivePlayer() == null)
+                                    renderDisplay("DRAW!");
+                                else
+                                    renderDisplay(`${active_player.getPlayerName()} WON!`);
+                            }
+                            else
+                                renderDisplay();
+                        }
+                    }
                 }
             }
-        }
+        )();
     }
 )();
