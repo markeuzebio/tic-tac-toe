@@ -113,6 +113,10 @@ header {
     font-size: 5rem;
 }
 
+header h1:hover {
+    cursor: pointer;
+}
+
 .board {
     display: grid;
     grid-template-rows: repeat(3, 1fr);

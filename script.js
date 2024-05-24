@@ -73,11 +73,11 @@ const GameController = (
             };
         }
 
-        return function(player_one_name = "Player 1", player_two_name = "Player 2")
+        return function(player_one_name, player_two_name)
         {
             const _game_board = Gameboard();
-            const _player_one = Player(player_one_name, 'X');
-            const _player_two = Player(player_two_name, 'O');
+            const _player_one = Player(player_one_name == '' ? "Player One" : player_one_name, 'X');
+            const _player_two = Player(player_two_name == '' ? "Player Two" : player_two_name, 'O');
 
             let active_player = _player_one;
             let game_over = false;
@@ -251,11 +251,12 @@ const ui = (
                 }
 
                 function blankAllSquares() {
-                    _board_squares_array.forEach((square) => square.target.textContent = '');
+                    _board_squares_array.forEach((square) => square.textContent = '');
                 }
 
                 return {
-                    blankAllSquares: blankAllSquares
+                    blankAllSquares: blankAllSquares,
+                    renderDisplay: renderDisplay
                 };
             };
 
@@ -269,10 +270,20 @@ const ui = (
                 const _btn_start = document.querySelector('#btn-start');
                 const _btn_restart = document.querySelector('#btn-restart');
                 const _btn_return = document.querySelector('#btn-return');
+                const _input_player_one_name = document.querySelector('#first-player');
+                const _input_player_two_name = document.querySelector('#second-player');
+                const _webpage_title = document.querySelector('header h1');
 
                 _btn_return.addEventListener('click', showGame);
                 _btn_start.addEventListener('click', startGame);
                 _btn_restart.addEventListener('click', restartGame);
+                _webpage_title.addEventListener('click', goToMenu);
+
+                function goToMenu()
+                {
+                    _game_screen.forEach((e) => e.classList.add('invisible'));
+                    _game_menu.classList.remove('invisible');
+                }
 
                 function showGame()
                 {
@@ -287,7 +298,7 @@ const ui = (
                 {
                     if(game_controller == null)
                     {
-                        game_controller = GameController();
+                        game_controller = GameController(_input_player_one_name.value, _input_player_two_name.value);
                         game_ui = GameUi();
                         showGame();
                     }
@@ -297,8 +308,9 @@ const ui = (
                 {
                     if(game_controller != null)
                     {
-                        game_controller = GameController();
+                        game_controller = GameController(_input_player_one_name.value, _input_player_two_name.value);
                         game_ui.blankAllSquares();
+                        game_ui.renderDisplay(_input_player_one_name.value);
                         showGame();
                     }
                 }
